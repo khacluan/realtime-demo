@@ -1,0 +1,17 @@
+<%= link_to 'Back', lists_path %>
+<h1>Realtime list</h1>
+
+<%= render 'form' %>
+
+<ul id="list">
+  <%-@lists.each do |list|-%>
+    <li><%= "#{list.title}  ----  #{list.created_at.strftime('%Y-%m-%d')}" %></li>
+  <%-end-%>
+</ul>
+<script>
+  var socket = io.connect('http://localhost:5001');
+
+  socket.on('new_list', function (data) {
+    $('#list').prepend("<li>" + data.title + "  ----  " + $.format.date(data.created_at, "yyyy-MM-dd") + "</li>");
+  });
+</script>
